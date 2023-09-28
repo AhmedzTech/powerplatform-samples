@@ -1,0 +1,79 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_todo": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "sahaba_sharedtodo_619c1"
+        },
+        "api": {
+          "name": "shared_todo"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "11db75b7-4edb-4332-9e17-aff86b6c37cb"
+          },
+          "type": "Request",
+          "kind": "PowerApp",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Addato-do(V3)_Title": {
+                  "type": "string",
+                  "description": "Brief description or title of the to-do.. This parameter is used as part of \"351791EC-3A6B-4FF8-9EF3-1C9EBF1C76CE\"",
+                  "x-ms-powerflows-param-ispartial": true
+                }
+              },
+              "required": [
+                "Addato-do(V3)_Title"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Add_a_to-do_(V3)": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "c752de21-d7f6-4eec-b8cb-54e49caeb544"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_todo",
+              "operationId": "CreateToDoV3",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_todo"
+            },
+            "parameters": {
+              "folderId": "AQMkADNiYTI4MDY1LWNiMWYtNDA2My1hNDNhLWE4NjJhMWQ5Zjk3OAAuAAADAUECwSLcMEqvJEPpdK64agEAfY6ESpFI2ECVMrshLxZZbwAAAgESAAAA",
+              "body/title": "DefaultToDo - @{triggerBody()['Addato-do(V3)_Title']}"
+            },
+            "authentication": {
+              "type": "Raw",
+              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+            }
+          }
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}
